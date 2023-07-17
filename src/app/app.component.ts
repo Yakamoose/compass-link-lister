@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   productData!: any[];
   productList!: any[];
 
@@ -20,8 +20,7 @@ export class AppComponent implements OnInit {
       // console.log(this.productData);
 
       this.productList = this.listConverter(this.productData);
-      // call display func here with (this.data)
-      this.displayUI(this.productList);
+      // html will display automatically
     });
   }
 
@@ -30,19 +29,9 @@ export class AppComponent implements OnInit {
     productData.sort((a, b) => a.productName.localeCompare(b.productName));
     productData.sort((a, b) => a.portfolio.localeCompare(b.portfolio));
 
+    // remove recordType = Family
     productData = productData.filter(({ recordType }) => !['Family'].includes(recordType))
 
-    // remove recordType = Family
     return productData;
   }
-
-  displayUI(productList: any[]) {
-    console.log({ productList })
-  }
-
-  ngOnInit() {
-    // Fetch JSON data from assets
-
-  }
-
 }
