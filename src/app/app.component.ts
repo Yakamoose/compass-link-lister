@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class AppComponent {
   productData!: any[];
   productList!: any[];
+  onlyShowLinkProducts = false;
 
   constructor(private http: HttpClient) {
     this.getData();
@@ -17,20 +18,19 @@ export class AppComponent {
   getData() {
     this.http.get('./assets/productData-july16.json').subscribe((data: any) => {
       this.productData = data.data;
-      // console.log(this.productData);
-
       this.productList = this.listConverter(this.productData);
-      // html will display automatically
     });
   }
 
   listConverter(productData: any[]): any[] {
-    // sort alphabetically    
     productData.sort((a, b) => a.productName.localeCompare(b.productName));
     productData.sort((a, b) => a.portfolio.localeCompare(b.portfolio));
-
-    // remove recordType = Family
-    productData = productData.filter(({ recordType }) => !['Family'].includes(recordType))
+    productData = productData.filter(({ recordType }) => !['Family'].includes(recordType));
+    
+    // Filter out products based on onlyShowLinkProducts
+    if (this.onlyShowLinkProducts) {
+      productData = productData.filter(product => product.compassLink !== '');
+    }
 
     return productData;
   }
